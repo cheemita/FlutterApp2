@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/providers/login_form_provider.dart';
+import 'package:flutter_application_2/ui/input_decorations.dart';
 import 'package:flutter_application_2/widgets/auth_background.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -47,26 +50,35 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _loginForm() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        TextField(
-          controller: _usernameController,
-          decoration: const InputDecoration(
-              icon: Icon(Icons.mail), labelText: 'Correo electrónico'),
-        ),
-        TextField(
-          controller: _passwordController,
-          decoration: const InputDecoration(
-              icon: Icon(Icons.lock_open), labelText: 'Contraseña'),
-          obscureText: true,
-          keyboardType: TextInputType.visiblePassword,
-        ),
-        Container(
-            margin: const EdgeInsets.only(top: 10.0),
-            child:
-                ElevatedButton(onPressed: onLogin, child: const Text('Login')))
-      ],
+    final loginForm = Provider.of<LoginFormProvider>(context);
+
+    return Form(
+      key: loginForm.formKey,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          TextField(
+              controller: _usernameController,
+              decoration: InputDecorations.authInputDecoration(
+                  hintText: "",
+                  labelText: "Username",
+                  prefixIcon: Icons.email)),
+          TextField(
+            controller: _passwordController,
+            decoration: InputDecorations.authInputDecoration(
+                hintText: "",
+                labelText: "Password",
+                prefixIcon: Icons.lock_open),
+            obscureText: true,
+            keyboardType: TextInputType.visiblePassword,
+          ),
+          Container(
+              margin: const EdgeInsets.only(top: 10.0),
+              child: ElevatedButton(
+                  onPressed: onLogin, child: const Text('Login')))
+        ],
+      ),
     );
   }
 
